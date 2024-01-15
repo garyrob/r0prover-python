@@ -1,0 +1,11 @@
+[package]
+name = "l2-r0prover"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "l2_r0prover"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.20."}
