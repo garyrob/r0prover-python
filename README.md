@@ -1,2 +1,2 @@
-# r0prover-python
-Python bindings for RISC0 prover
+## Python/Ray wrapper for RISC Zero prover
+
