@@ -8,7 +8,7 @@ name = "l2_r0prover"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.20.2", features = ["extension-module", "anyhow", "auto-initialize"] }
+pyo3 = { version = "0.20.2", features = ["extension-module", "anyhow"] }
 risc0-binfmt  = { git = "https://github.com/l2iterative/risc0/", branch="no-rust-runtime-for-host" }
 risc0-zkvm-platform  = { git = "https://github.com/l2iterative/risc0/", branch="no-rust-runtime-for-host" }
 risc0-zkvm = { git = "https://github.com/l2iterative/risc0/", branch="no-rust-runtime-for-host", features = ["prove"] }
