@@ -42,7 +42,7 @@ input = bytes([33, 0, 0, 0, 2, 0, 0, 0, 193, 0, 0, 0, 8, 0, 0, 0, 182, 0, 0, 0, 
 
 print("running the VM...")
 tic = time.perf_counter()
-future = async_execute_with_input.remote(image, input, 18)
+future = async_execute_with_input.remote(image, input)
 segments, info = ray.get(future)
 toc = time.perf_counter()
 print(f"It takes {toc - tic:0.4f} seconds")
