@@ -28,7 +28,7 @@ jobs:
           target: ${{ matrix.target }}
           args: --release --features cuda --out dist --find-interpreter
           sccache: 'true'
-          container: sameli/manylinux2014_x86_64_cuda_12.3
+          container: pytorch/manylinux-builder:cuda12.1
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
