@@ -50,7 +50,7 @@ Tools for this purpose have been extensively studied in machine learning, and we
 enables simple remote computation, starting as a UC Berkeley research project. To let two remote clusters to each prove a segment, this can be done with the following 
 code.
 
-<img src="https://github.com/ray-project/ray/raw/master/doc/source/images/ray_header_logo.png" align="right" style="margin: 10px;" width="400"/>
+<img src="https://ray-project.github.io/q4-2021-docs-hackathon/0.3/images/ray-logo.png" align="right" width="200"/>
 
 ```python
 import l2_r0prover, ray
@@ -78,7 +78,8 @@ receipt_2 = ray.get(future_2)
 ```
 
 [Dask](https://www.dask.org/) is another distributed computing framework with wide adoption. It can be done in a similar manner.
-<img src="https://docs.dask.org/en/stable/_images/dask_horizontal.svg" align="right" style="margin: 10px;padding: 80px;" width="400"/>
+
+<img src="https://docs.dask.org/en/stable/_images/dask_horizontal.svg" align="right" width="200"/>
 
 ```python
 import l2_r0prover
