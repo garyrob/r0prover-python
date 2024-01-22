@@ -1,6 +1,6 @@
 ## Python wrapper for RISC Zero prover
 
-<img src="title.png" align="right" style="margin: 20px;" alt="many military tanks rolling in parallel on the desert" width="300"/>
+<img src="https://github.com/l2iterative/r0prover-python/raw/main/title.png" align="right" style="margin: 20px;" alt="many military tanks rolling in parallel on the desert" width="300"/>
 
 When people talk about accelerating zero-knowledge proofs, there are usually two approaches:
 - hardware acceleration
