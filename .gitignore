@@ -16,3 +16,4 @@ Cargo.lock
 .idea
 
 .python-version
+test/__pycache__
