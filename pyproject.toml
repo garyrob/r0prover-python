@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "l2_r0prover"
-version = "0.1.1"
+version = "0.2.0"
 authors = [
     { name = "Weikeng Chen", email = "weikeng.chen@l2iterative.com" }
 ]
