@@ -76,6 +76,11 @@ if __name__ == '__main__':
   receipt_2 = future_2.result()
 ```
 
+### Supported versions
+
+Currently, the library is compiled with CUDA 12.3. There is a risk that it would not work with other versions of CUDA and
+would require compilation from the source.
+
 ### License
 
 As mentioned in [pyproject.toml](pyproject.toml), this Python module, listed on PyPI, is under MIT and Apache 2 licenses.
