@@ -1,39 +1,20 @@
 import l2_r0prover
 import time
 import ray
+from ray.util.dask import enable_dask_on_ray
+
+import dask.array as da
+from dask import delayed
 
 ray.init()
-
-@ray.remote
-def async_load_image_from_elf(_elf):
-    return l2_r0prover.load_image_from_elf(_elf)
-
-@ray.remote
-def async_execute_with_input(_image, _input, _segment_size_limit = None):
-    return l2_r0prover.execute_with_input(_image, _input, _segment_size_limit)
-
-@ray.remote
-def async_prove_segment(_segment):
-    return l2_r0prover.prove_segment(_segment)
-
-@ray.remote
-def async_lift_segment_receipt(_segment_receipts):
-    return l2_r0prover.lift_segment_receipt(_segment_receipts)
-
-@ray.remote
-def async_join_succinct_receipts(_succinct_receipts):
-    return l2_r0prover.join_succinct_receipts(_succinct_receipts)
-
-@ray.remote
-def async_join_segment_receipts(_segments_receipts):
-    return l2_r0prover.join_segment_receipts(_segments_receipts)
+enable_dask_on_ray()
 
 print("loading the ELF...")
 elf_handle = open("elf", mode="rb")
 elf = elf_handle.read()
 tic = time.perf_counter()
-future = async_load_image_from_elf.remote(elf)
-image = ray.get(future)
+future = delayed(l2_r0prover.load_image_from_elf, pure=True)(elf)
+image = future.compute()
 toc = time.perf_counter()
 print(f"It takes {toc - tic:0.4f} seconds")
 
@@ -42,40 +23,42 @@ input = bytes([33, 0, 0, 0, 2, 0, 0, 0, 193, 0, 0, 0, 8, 0, 0, 0, 182, 0, 0, 0, 
 
 print("running the VM...")
 tic = time.perf_counter()
-future = async_execute_with_input.remote(image, input)
-segments, info = ray.get(future)
+future = delayed(l2_r0prover.execute_with_input, pure=True)(image, input)
+segments, info = future.compute()
 toc = time.perf_counter()
 print(f"It takes {toc - tic:0.4f} seconds")
 print(f"There are {len(segments)} segments")
 
 print("generate the receipt for the 1st segment...")
 tic = time.perf_counter()
-future = async_prove_segment.remote(segments[0])
-receipt_1 = ray.get(future)
+future = delayed(l2_r0prover.prove_segment, pure=True)(segments[0])
+receipt_1 = future.compute()
 toc = time.perf_counter()
 print(f"It takes {toc - tic:0.4f} seconds")
 
 print("generate the receipt for the 2nd segment...")
 tic = time.perf_counter()
-future = async_prove_segment.remote(segments[1])
-receipt_2 = ray.get(future)
+future = delayed(l2_r0prover.prove_segment, pure=True)(segments[1])
+receipt_2 = future.compute()
 toc = time.perf_counter()
 print(f"It takes {toc - tic:0.4f} seconds")
 
 print("lift both receipts and then join them...")
 tic = time.perf_counter()
-future_1 = async_lift_segment_receipt.remote(receipt_1)
-future_2 = async_lift_segment_receipt.remote(receipt_2)
-receipt_1_lifted = ray.get(future_1)
-receipt_2_lifted = ray.get(future_2)
-future = async_join_succinct_receipts.remote([receipt_1_lifted, receipt_2_lifted])
-receipt_joint = ray.get(future)
+future_1 = delayed(l2_r0prover.lift_segment_receipt, pure=True)(receipt_1)
+future_2 = delayed(l2_r0prover.lift_segment_receipt, pure=True)(receipt_2)
+receipt_1_lifted = future_1.compute()
+receipt_2_lifted = future_2.compute()
+future = delayed(l2_r0prover.join_succinct_receipts, pure=True)([receipt_1_lifted, receipt_2_lifted])
+receipt_joint = future.compute()
 toc = time.perf_counter()
 print(f"It takes {toc - tic:0.4f} seconds")
 
 print("Join both receipts...")
 tic = time.perf_counter()
-future = async_join_segment_receipts.remote([receipt_1, receipt_2])
-receipt_joint_2 = ray.get(future)
+future = delayed(l2_r0prover.join_segment_receipts, pure=True)([receipt_1, receipt_2])
+receipt_joint_2 = future.compute()
 toc = time.perf_counter()
 print(f"It takes {toc - tic:0.4f} seconds")
+
+ray.shutdown()
