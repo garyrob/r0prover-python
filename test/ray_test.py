@@ -3,7 +3,6 @@ import time
 import ray
 from ray.util.dask import enable_dask_on_ray
 
-import dask.array as da
 from dask import delayed
 
 ray.init()
