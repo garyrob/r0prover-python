@@ -41,41 +41,13 @@ For RISC Zero, it is desirable, for Bonsai, to merge proofs from different trans
 costs, which means that all proofs would eventually go through recursion, which discourages KZG-based approach.
 
 The third approach reduces the entire acceleration task into a simple step: **coordinate** enough machines to work together.
-Tools for this purpose have been extensively studied in machine learning, and we can use two widely adopted frameworks,
-[Ray](https://www.usenix.org/conference/osdi18/presentation/moritz) and [Dask](https://www.dask.org/), here.
+Tools for this purpose have been extensively studied in machine learning, and we here focus on the [Dask](https://www.dask.org/) 
+framework.
 
-### Background in Ray and Dask, two distributed computing frameworks
+We have experimented with the [Ray](https://github.com/ray-project/ray), but the fact that it uses `fork()` appears to 
+require a lot of care when handling with the CUDA connections. 
 
-[Ray](https://www.usenix.org/conference/osdi18/presentation/moritz) (USENIX OSDI 2018) is a distributed computing framework that 
-enables simple remote computation, starting as a UC Berkeley research project. To let two remote clusters to each prove a segment, this can be done with the following 
-code.
-
-<img src="https://ray-project.github.io/q4-2021-docs-hackathon/0.3/images/ray-logo.png" align="right" width="200"/>
-
-```python
-import l2_r0prover, ray
-
-ray.init()
-
-# define a Ray remote function
-@ray.remote
-def async_prove_segment(_segment):
-    return l2_r0prover.prove_segment(_segment)
-
-elf_handle = open("elf", mode="rb")
-elf = elf_handle.read()
-image = l2_r0prover.load_image_from_elf(elf)
-input = bytes([33, 0, 0, 0, ...]) # omit the detail input
-segments, info = l2_r0prover.execute_with_input(image, input)
-
-# distribute the task using `func.remote(args)`
-future_1 = async_prove_segment.remote(segments[0])
-future_2 = async_prove_segment.remote(segments[1])
-
-# obtain the results using `ray.get(future)`
-receipt_1 = ray.get(future_1)
-receipt_2 = ray.get(future_2)
-```
+### Background in Dask, a distributed computing framework
 
 [Dask](https://www.dask.org/) is another distributed computing framework with wide adoption. It can be done in a similar manner.
 
@@ -103,7 +75,6 @@ if __name__ == '__main__':
   receipt_1 = future_1.result()
   receipt_2 = future_2.result()
 ```
-
 
 ### License
 
