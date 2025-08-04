@@ -17,3 +17,6 @@ Cargo.lock
 
 .python-version
 test/__pycache__
+src/l2_r0prover/__pycache__/
+*.so
+.venv/

@@ -4,11 +4,11 @@ version = "0.2.0"
 edition = "2021"
 
 [lib]
-name = "l2_r0prover"
+name = "_rust"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.20.2", features = ["extension-module", "anyhow"] }
+pyo3 = { version = "0.23.4", features = ["extension-module", "abi3", "abi3-py39"] }
 risc0-binfmt  = { git = "https://github.com/l2iterative/risc0/", branch="no-rust-runtime-for-host" }
 risc0-zkvm-platform  = { git = "https://github.com/l2iterative/risc0/", branch="no-rust-runtime-for-host" }
 risc0-zkvm = { git = "https://github.com/l2iterative/risc0/", branch="no-rust-runtime-for-host", features = ["prove"] }
